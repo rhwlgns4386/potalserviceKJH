@@ -9,6 +9,7 @@ import java.sql.SQLException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 
 
@@ -19,7 +20,7 @@ public class UserDaoTests {
     @BeforeAll
     public  static void setup(){
         ApplicationContext applicationContext=new AnnotationConfigApplicationContext(DaoFactory.class);
-        userDao=applicationContext.getBean("userDao",UserDao.class);
+        userDao=applicationContext.getBean("user",UserDao.class);
     }
     @Test
     public void get() throws SQLException, ClassNotFoundException {
@@ -54,6 +55,49 @@ public class UserDaoTests {
         assertThat(insertedUser.getPassword(),is(user.getPassword()));
         assertThat(insertedUser.getName(),is(user.getName()));
 
+    }
+
+    @Test
+    public void update() throws SQLException {
+        User user=new User();
+        String name="허윤호";
+        String password="1111";
+        user.setName(name);
+        user.setPassword(password);
+//        DaoFactory daoFactory=new DaoFactory();
+//        UserDao userDao=daoFactory.userDao();
+        userDao.insert(user);
+
+        user.setName("hulk");
+        user.setPassword("1234");
+
+        userDao.update(user);
+
+        User updateUser=userDao.findById(user.getId());
+
+        assertThat(updateUser.getId(),is(user.getId()));
+        assertThat(updateUser.getName(),is(user.getName()));
+        assertThat(updateUser.getPassword(),is(user.getPassword()));
+
+    }
+
+    @Test
+    public void delete() throws SQLException {
+        User user=new User();
+        String name="허윤호";
+        String password="1111";
+        user.setName(name);
+
+        user.setPassword(password);
+//        DaoFactory daoFactory=new DaoFactory();
+//        UserDao userDao=daoFactory.userDao();
+        userDao.insert(user);
+
+        userDao.delete(user.getId());
+
+        User deletedUser= userDao.findById(user.getId());
+
+        assertThat(deletedUser,nullValue());
     }
 
 //    @Test

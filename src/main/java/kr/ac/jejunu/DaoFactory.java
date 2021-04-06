@@ -1,22 +1,45 @@
 package kr.ac.jejunu;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Configuration
 public class DaoFactory {
 
-    @Bean
-    public UserDao userDao() {
-        return new UserDao(ConnectionMaker());
+    @Value("${db.driver}")
+    private String className;
+    @Value("${db.username}")
+    private String username;
+    @Value("${db.password}")
+    private String password;
+    @Value("${db.url}")
+    private String url;
+
+    @Bean(name="user")
+    public UserDao userDao() throws ClassNotFoundException {
+        return new UserDao(dataSource());
     }
 
     @Bean
-    public JejuConnetcionMaker ConnectionMaker() {
-        return new JejuConnetcionMaker();
+    public DataSource dataSource() throws ClassNotFoundException {
+//        className = "com.mysql.cj.jdbc.Driver";
+//        username = "jeju";
+//        password = "jejupw";
+//        url = "jdbc:mysql://localhost/jeju?" +
+//                "characterEncoding=utf-8&serverTimezone=UTC";
+        SimpleDriverDataSource dataSource=new SimpleDriverDataSource();
+        dataSource.setDriverClass((Class<? extends Driver>) Class.forName(className));
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setUrl(url);
+        return dataSource;
     }
 }

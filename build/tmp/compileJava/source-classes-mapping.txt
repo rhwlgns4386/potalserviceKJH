@@ -2,11 +2,11 @@ kr/ac/jejunu/ConnetcionMaker.java
  kr.ac.jejunu.ConnetcionMaker
 kr/ac/jejunu/User.java
  kr.ac.jejunu.User
-kr/ac/jejunu/UserDao.java
- kr.ac.jejunu.UserDao
 kr/ac/jejunu/JejuConnetcionMaker.java
  kr.ac.jejunu.JejuConnetcionMaker
 kr/ac/jejunu/HallaConnetcionMaker.java
  kr.ac.jejunu.HallaConnetcionMaker
+kr/ac/jejunu/UserDao.java
+ kr.ac.jejunu.UserDao
 kr/ac/jejunu/DaoFactory.java
  kr.ac.jejunu.DaoFactory
