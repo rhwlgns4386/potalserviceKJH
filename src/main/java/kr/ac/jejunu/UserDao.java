@@ -1,144 +1,70 @@
 package kr.ac.jejunu;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
 import javax.sql.DataSource;
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicTreeUI;
 import java.sql.*;
 
 public class UserDao {
-    private final DataSource dataSource;
-    public UserDao(DataSource dataSource){
-        this.dataSource=dataSource;
+    private final JdbcTemplate jdbcTemplate ;
+
+    public UserDao(JdbcTemplate jdbcTemplate){
+        this.jdbcTemplate=jdbcTemplate;
     }
 
     public User findById(Integer id) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet result = null;
-        User user = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("select *from userinfo where id=?");
-            preparedStatement.setInt(1, id);
-            result = preparedStatement.executeQuery();
-            if(result.next()){
-                user = new User();
-                user.setId(result.getInt("id"));
-                user.setName(result.getString("name"));
-                user.setPassword(result.getString("password"));
-            }
+        String sql="select *from userinfo where id=?";
+//        Object[] param=new Object[]{id};
 
-
-        } finally {
-            try {
-                result.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-            try {
-                preparedStatement.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-            try {
-                connection.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-
-        }
+        return jdbcTemplate.query(sql,rs -> {
+            User user = null;
+            if(rs.next()){
+                user=new User();
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setPassword(rs.getString("password"));}
             return user;
+        },id);
     }
-    public User insert(User user) throws SQLException{
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("insert into userinfo(name,password) value(?,?)",
+
+
+
+    public void insert(User user) throws SQLException{
+        String sql="insert into userinfo(name,password) value(?,?)";
+        Object[] param=new Object[]{user.getName(),user.getPassword()};
+        
+        KeyHolder keyHolder=new GeneratedKeyHolder();
+        jdbcTemplate.update(con -> {
+            PreparedStatement preparedStatement = con.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS);
-
-
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-
-            preparedStatement.executeUpdate();
-            resultSet = preparedStatement.getGeneratedKeys();
-            resultSet.next();
-            user.setId(resultSet.getInt(1));
-        } finally {
-            try {
-                resultSet.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
+            for (int i = 0; i < param.length; i++) {
+                preparedStatement.setObject(i + 1, param[i]);
             }
-            try {
-                preparedStatement.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            } finally {
-            }
-            try {
-                connection.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-
-        }
-        return user;
+            return preparedStatement;
+        },keyHolder);
+        user.setId(keyHolder.getKey().intValue());
     }
+
+
 
     public void update(User user) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("update userinfo set name=?, password=? where id=?");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setInt(3,user.getId());
-
-            preparedStatement.executeUpdate();
-        } finally {
-            try {
-                preparedStatement.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-            try {
-                connection.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-        }
-
+        String sql="update userinfo set name=?, password=? where id=?";
+        Object[] param=new Object[]{user.getName(),user.getPassword(),user.getId()};
+        jdbcTemplate.update(sql, param);
     }
+
+
 
     public void delete(Integer id) throws SQLException {
-        Connection connection = null;
-        PreparedStatement preparedStatement = null;
-        try {
-            connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("delete from userinfo where id=?");
-            preparedStatement.setInt(1, id);
+        String sql="delete from userinfo where id=?";
+        Object[] param=new Object[]{id};
 
-            preparedStatement.executeUpdate();
-
-        } finally {
-
-            try {
-                preparedStatement.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-            try {
-                connection.close();
-            } catch (Exception throwables) {
-                throwables.printStackTrace();
-            }
-
-        }
+        jdbcTemplate.update(sql,param);
     }
 
-//    public Connection getConnection() throws ClassNotFoundException, SQLException{
-//        return connetcionMaker.getConnection();
-//    }
+
 }
