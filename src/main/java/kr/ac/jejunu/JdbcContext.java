@@ -1,5 +1,8 @@
 package kr.ac.jejunu;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.sql.DataSource;
 import java.sql.*;
 

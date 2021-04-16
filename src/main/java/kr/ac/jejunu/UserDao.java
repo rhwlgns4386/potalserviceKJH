@@ -1,20 +1,25 @@
 package kr.ac.jejunu;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicTreeUI;
 import java.sql.*;
 
+@Component
 public class UserDao {
     private final JdbcTemplate jdbcTemplate ;
 
+    @Autowired
     public UserDao(JdbcTemplate jdbcTemplate){
         this.jdbcTemplate=jdbcTemplate;
     }
+
 
     public User findById(Integer id) throws SQLException {
         String sql="select *from userinfo where id=?";
@@ -36,7 +41,7 @@ public class UserDao {
     public void insert(User user) throws SQLException{
         String sql="insert into userinfo(name,password) value(?,?)";
         Object[] param=new Object[]{user.getName(),user.getPassword()};
-        
+
         KeyHolder keyHolder=new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement preparedStatement = con.prepareStatement(sql,

@@ -8,9 +8,9 @@ kr/ac/jejunu/HallaConnetcionMaker.java
  kr.ac.jejunu.HallaConnetcionMaker
 kr/ac/jejunu/JejuConnetcionMaker.java
  kr.ac.jejunu.JejuConnetcionMaker
-kr/ac/jejunu/JdbcContext.java
- kr.ac.jejunu.JdbcContext
 kr/ac/jejunu/UserDao.java
  kr.ac.jejunu.UserDao
+kr/ac/jejunu/JdbcContext.java
+ kr.ac.jejunu.JdbcContext
 kr/ac/jejunu/DaoFactory.java
  kr.ac.jejunu.DaoFactory
