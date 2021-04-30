@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.number.OrderingComparison.comparesEqualTo;
 import static org.hamcrest.number.OrderingComparison.greaterThan;
 
 
@@ -40,9 +41,10 @@ public class UserDaoTests {
 
     @Test
     public void insert() throws SQLException, ClassNotFoundException {
-        User user=new User();
         String name="허윤호";
         String password="1111";
+        //User user=User.builder().name(name).password(password).build();
+        User user=new User();
         user.setName(name);
 
         user.setPassword(password);

@@ -1,5 +1,6 @@
 package kr.ac.jejunu;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -12,16 +13,20 @@ import javax.swing.plaf.basic.BasicTreeUI;
 import java.sql.*;
 
 @Component
+@RequiredArgsConstructor
 public class UserDao {
+
     private final JdbcTemplate jdbcTemplate ;
 
-    @Autowired
-    public UserDao(JdbcTemplate jdbcTemplate){
-        this.jdbcTemplate=jdbcTemplate;
-    }
+//    @Autowired
+//    public UserDao(JdbcTemplate jdbcTemplate){
+//        this.jdbcTemplate=jdbcTemplate;
+//    }
 
 
-    public User findById(Integer id) throws SQLException {
+    public User findById(Integer id)  {
+        String test="테스트";
+        System.out.println(test);
         String sql="select *from userinfo where id=?";
 //        Object[] param=new Object[]{id};
 

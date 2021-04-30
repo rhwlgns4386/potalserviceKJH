@@ -1,16 +1,22 @@
 package kr.ac.jejunu;
 
+import lombok.*;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private Integer id;
     private String name;
     private String password;
 
-    public Integer getId() {
-        return id;
+    public String getPassword() {
+        return password;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -21,11 +27,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
