@@ -22,8 +22,8 @@ public class UserServlet extends GenericServlet {
 
     @Override
     public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-        Integer id=Integer.parseInt(req.getParameter("id"));
-        User user=userDao.findById(id);
+        //Integer id=Integer.parseInt(req.getParameter("id"));
+        User user=userDao.findById(1);
         res.setContentType("text/html; charset=UTF-8");
         System.out.println("*************** service *****************");
         StringBuffer response=new StringBuffer();
