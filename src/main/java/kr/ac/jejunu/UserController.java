@@ -7,10 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.*;
 
 @Controller
 @RequestMapping
@@ -28,12 +25,14 @@ public class UserController {
     public void upload(){}
 
     @RequestMapping(path = "/upload",method = RequestMethod.POST)
-    public ModelAndView upload(@RequestParam("file")MultipartFile file, HttpServletRequest request) throws FileNotFoundException {
+    public ModelAndView upload(@RequestParam("file")MultipartFile file, HttpServletRequest request) throws IOException {
         String path=request.getServletContext().getRealPath("/")
                 +"WEB-INF/static/"+file.getOriginalFilename();
         File saveFile=new File(path);
         FileOutputStream fileOutputStream=new FileOutputStream(saveFile);
         BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(fileOutputStream);
+        bufferedOutputStream.write(file.getBytes());
+        bufferedOutputStream.close();
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("url","/images/"+file.getOriginalFilename());
         System.out.println(modelAndView);
